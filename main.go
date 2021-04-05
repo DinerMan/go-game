@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
-	"game/board"
+	"go-game/board"
 	"strings"
 )
-const size = 20
-const MaxRound = 25
+
+const (
+	Size = 20
+	MaxRound = 25
+)
 
 func validInput(pick string, options []string) bool {
 	for _, val := range options {
@@ -26,14 +29,14 @@ func getNumber (options []string) string {
 
 func main () {
 	// start game
-	b := board.CreateBoard(size)
+	b := board.CreateBoard(Size)
 	fmt.Println("welcome the the best board game")
 	fmt.Println("this is your board:")
-	b.PrintBoard()
+	fmt.Println(b)
 	for round:=1; !b.CheckWin() && round<MaxRound; round++ {  //game loop
 		pick := getNumber(board.Keys)
 		fmt.Println(fmt.Sprintf("round %v you pick: %v, your new board:", round, pick))
 		b.PaintBoard(pick)
-		b.PrintBoard()
+		fmt.Println(b)
 	}
 }

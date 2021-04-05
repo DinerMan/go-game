@@ -6,24 +6,25 @@ import (
 	"reflect"
 )
 
-
-const color = "\033["
-const colorReset = "0m"
-var keyMap = map[string]int{
-	"G": 32,
-	"R": 31,
-	"Y": 33,
-	"B": 34,
-}
-
-var Keys = func () []string {
-	keys := reflect.ValueOf(keyMap).MapKeys()
-	var formatKeys []string
-	for _, key := range keys {
-		formatKeys = append(formatKeys, key.String())
+const (
+	color = "\033["
+	colorReset = "0m"
+)
+var (
+	keyMap = map[string]int{
+		"G": 32, "R": 31,
+		"Y": 33, "B": 34,
 	}
-	return formatKeys
-}()
+
+	Keys = func () []string {
+		keys := reflect.ValueOf(keyMap).MapKeys()
+		var formatKeys []string
+		for _, key := range keys {
+			formatKeys = append(formatKeys, key.String())
+		}
+		return formatKeys
+	}()
+)
 
 
 type GameBoard struct {
@@ -45,20 +46,22 @@ func CreateBoard(size int) GameBoard {
 	return GameBoard{board: newBoard}
 }
 
-func (g GameBoard) PrintBoard() {
+func (g GameBoard) String() string {
+	var outPut string
 	for _, row := range g.board {
 		for _, value := range row {
-			fmt.Print(color ,keyMap[value], "m", value, " ")
+			outPut += fmt.Sprintf("%s%vm%v ", color, keyMap[value], value)
 		}
-		fmt.Println(color, colorReset)
+		outPut += fmt.Sprintf("%s%v\n", color, colorReset)
 	}
+	return outPut
 }
 
 func (g GameBoard) CheckWin() bool {
-	needed_color := g.board[0][0]
+	neededColor := g.board[0][0]
 	for _, row := range g.board {
 		for _, col := range row {
-			if col != needed_color {
+			if col != neededColor {
 				return false
 			}
 		}
